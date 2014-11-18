@@ -1,3 +1,11 @@
-test_poll_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: TestPollBundle:Default:index }
+TestPollBundle_homepage:
+    pattern:  /
+    defaults: { _controller: TestPollBundle:Page:index }
+    requirements:
+        _method:  GET
+
+TestPollBundle_about:
+    pattern:  /about
+    defaults: { _controller: TestPollBundle:Page:about }
+    requirements:
+        _method:  GET
