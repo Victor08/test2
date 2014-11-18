@@ -1,0 +1,20 @@
+{% extends 'TestPollBundle::layout.html.twig' %}
+
+{% block title %}{{ test.title }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/test.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+    <article class="test">
+        <header>
+            <div class="date"><time datetime="{{ test.created|date('c') }}">{{ test.created|date('l, F j, Y') }}</time></div>
+            <h2>{{ test.title }}</h2>
+        </header>
+        <div>
+            <p>test app here</p>
+        </div>
+    </article>
+{% endblock %}
