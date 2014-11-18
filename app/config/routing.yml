@@ -1,0 +1,4 @@
+test_poll:
+    resource: "@TestPollBundle/Resources/config/routing.yml"
+    prefix:   /
+
