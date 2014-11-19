@@ -1,0 +1,26 @@
+
+{% for question in questions %}
+    <article class="question {{ cycle(['odd', 'even'], loop.index0) }}" id="question-{{ question.id }}">
+        <header>
+            <p><span class="highlight">{{ question.title }}</span> </p>
+                     
+        </header>
+        
+    </article>
+{% else %}
+    <p>There are no questions found for this test.</p>
+{% endfor %}
+    
+{% for answer in answers %}
+    
+    
+    
+            <p><span class="highlight">{{ answer.title }}</span> </p>
+            <p>{{ answer.id }}</p>
+            <p>{{ answer.question }}</p> 
+               
+         
+                
+{% else %}
+    <p>There are no answers found for this test.</p>
+{% endfor %} 

@@ -16,7 +16,17 @@ class PageController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('TestPollBundle:Page:index.html.twig');
+        
+        $em = $this->getDoctrine()
+                   ->getManager();
+
+        $tests = $em->getRepository('TestPollBundle:Test')
+                    ->getTests();
+
+        return $this->render('TestPollBundle:Page:index.html.twig', array(
+            'tests' => $tests
+        ));
+    
     }
     
     public function aboutAction()

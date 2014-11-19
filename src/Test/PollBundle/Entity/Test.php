@@ -8,12 +8,15 @@
 
 namespace Test\PollBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\TestRepository")
  * @ORM\Table(name="test")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Test 
 {
@@ -39,7 +42,23 @@ class Test
      */
     protected $created;
     
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $description;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="test")
+     */
     protected $questions;
+    
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+
+        $this->setCreated(new \DateTime());
+        
+    }
     
     protected $answers;
 
@@ -120,5 +139,59 @@ class Test
     public function getCreated()
     {
         return $this->created;
+    }
+    
+    public function getQuestions($length = null)
+    {
+        if (false === is_null($length) && $length > 0)
+            return substr($this->questions, 0, $length);
+        else
+            return $this->questions;
+    }
+
+    /**
+     * Add questions
+     *
+     * @param \Test\PollBundle\Entity\Question $questions
+     * @return Test
+     */
+    public function addQuestion(\Test\PollBundle\Entity\Question $questions)
+    {
+        $this->questions[] = $questions;
+
+        return $this;
+    }
+
+    /**
+     * Remove questions
+     *
+     * @param \Test\PollBundle\Entity\Question $questions
+     */
+    public function removeQuestion(\Test\PollBundle\Entity\Question $questions)
+    {
+        $this->questions->removeElement($questions);
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Test
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

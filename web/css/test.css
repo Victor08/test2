@@ -16,3 +16,10 @@ and open the template in the editor.
 .test .meta { font-style: italic; font-size: 12px; color: #666; }
 .test .meta p { margin-bottom: 5px; line-height: 1.2em; }
 .test img.large { width: 300px; min-height: 165px; }
+
+.questions { clear: both; }
+.questions .odd { background: #eee; }
+.questions .question { padding: 20px; }
+.questions .question p { margin-bottom: 0; }
+.questions h3 { background: #eee; padding: 10px; font-size: 20px; margin-bottom: 20px; clear: both; }
+.questions .all-questions { margin-bottom: 20px; }
