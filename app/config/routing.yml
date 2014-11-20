@@ -1,3 +1,7 @@
+security_profile:
+    resource: "@SecurityProfileBundle/Resources/config/routing.yml"
+    prefix:   /
+
 test_poll:
     resource: "@TestPollBundle/Resources/config/routing.yml"
     prefix:   /

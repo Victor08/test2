@@ -13,6 +13,16 @@ _configurator:
 _main:
     resource: routing.yml
 
-# AcmeDemoBundle routes (to be removed)
-#_acme_demo:
-#    resource: "@AcmeDemoBundle/Resources/config/routing.yml"
+login:
+    pattern:   /login
+    defaults:  { _controller: SecurityProfileBundle:Security:login }
+    
+login_check:
+    pattern:   /login_check
+    
+tests:
+    pattern: /tests
+    defaults: {_controller: TestPollBundle:TestController:show }
+
+logout:
+    path:     /logout

@@ -1,0 +1,26 @@
+{# src/Test/PollBundle/Resources/views/Page/index.html.twig #}
+{% extends 'TestPollBundle::layout.html.twig' %}
+
+{% block body %}
+    {% for test in tests %}
+        <article class="test">
+            <div class="date"><time datetime="{{ test.created|date('c') }}">{{ test.created|date('l, F j, Y') }}</time></div>
+            <header>
+                <h2><a href="{{ path('TestPollBundle_test_show', { 'id': test.id }) }}">{{ test.title }}</a></h2>
+            </header>
+
+            <div class="snippet">
+                <p>{{ test.title(500) }}</p>
+                <p class="continue"><a href="{{ path('TestPollBundle_test_show', { 'id': test.id }) }}">Start the test</a></p>
+            </div>
+
+            <footer class="meta">
+                <p>Comments: -</p>
+                <p>Created by <span class="highlight">{{test.author}}</span> at {{ test.created|date('h:iA') }}</p>
+           
+            </footer>
+        </article>
+    {% else %}
+        <p>There are no tests created yet</p>
+    {% endfor %}
+{% endblock %}

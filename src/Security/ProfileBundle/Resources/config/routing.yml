@@ -1,0 +1,3 @@
+security_profile_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: SecurityProfileBundle:Default:index }

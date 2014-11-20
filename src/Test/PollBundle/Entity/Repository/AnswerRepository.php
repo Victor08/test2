@@ -28,7 +28,7 @@ class AnswerRepository extends EntityRepository
         if (false === is_null($approved))
             $qb->andWhere('a.approved = :approved')
                ->setParameter('approved', $approved);
-        $ololets = $qb->getQuery();
+        
         $result = $qb->getQuery()
                      ->getResult();
         $answers = array();

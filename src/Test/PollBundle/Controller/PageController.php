@@ -14,7 +14,16 @@ use Test\PollBundle\Form\EnquiryType;
 
 class PageController extends Controller
 {
+    
     public function indexAction()
+    {
+        return $this->render('TestPollBundle:Page:index.html.twig');
+        
+    }
+
+    
+
+    public function test_listAction()
     {
         
         $em = $this->getDoctrine()
@@ -23,7 +32,7 @@ class PageController extends Controller
         $tests = $em->getRepository('TestPollBundle:Test')
                     ->getTests();
 
-        return $this->render('TestPollBundle:Page:index.html.twig', array(
+        return $this->render('TestPollBundle:Page:test_list.html.twig', array(
             'tests' => $tests
         ));
     

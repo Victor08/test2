@@ -22,3 +22,9 @@ TestPollBundle_test_show:
     requirements:
         _method:  GET
         id: \d+
+        
+TestPollBundle_test_list:
+    pattern:  /tests
+    defaults: { _controller: TestPollBundle:Page:test_list }
+    requirements:
+        _method:  GET

@@ -60,7 +60,10 @@ class Test
         
     }
     
-    protected $answers;
+    /**
+     * @ORM\Column(type="array")
+     */
+    protected $correctAnswers;
 
     /**
      * Get id
@@ -193,5 +196,28 @@ class Test
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set correctAnswers
+     *
+     * @param array $correctAnswers
+     * @return Test
+     */
+    public function setCorrectAnswers($correctAnswers)
+    {
+        $this->correctAnswers = $correctAnswers;
+
+        return $this;
+    }
+
+    /**
+     * Get correctAnswers
+     *
+     * @return array 
+     */
+    public function getCorrectAnswers()
+    {
+        return $this->correctAnswers;
     }
 }
