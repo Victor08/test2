@@ -1,4 +1,4 @@
-{# src/Test/PollBundle/Resources/views/Page/index.html.twig #}
+
 {% extends 'TestPollBundle::layout.html.twig' %}
 
 {% block body %}
@@ -6,12 +6,12 @@
         <article class="test">
             <div class="date"><time datetime="{{ test.created|date('c') }}">{{ test.created|date('l, F j, Y') }}</time></div>
             <header>
-                <h2><a href="{{ path('TestPollBundle_test_show', { 'id': test.id }) }}">{{ test.title }}</a></h2>
+                <h2><a href="{{ path('TestPollBundle_test_show', { 'test_id': test.id }) }}">{{ test.title }}</a></h2>
             </header>
 
             <div class="snippet">
                 <p>{{ test.title(500) }}</p>
-                <p class="continue"><a href="{{ path('TestPollBundle_test_show', { 'id': test.id }) }}">Start the test</a></p>
+                <p class="continue"><a href="{{ path('TestPollBundle_test_show', { 'test_id': test.id }) }}">Start the test</a></p>
             </div>
 
             <footer class="meta">

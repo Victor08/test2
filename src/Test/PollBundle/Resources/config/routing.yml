@@ -16,15 +16,23 @@ TestPollBundle_contact:
     requirements:
         _method:  GET|POST
         
+TestPollBundle_test_submitted:
+    pattern: /test/submitted
+    defaults: { _controller: TestPollBundle:Test:test_submitted }
+    requirements:
+        _method:  GET|POST   
+        
 TestPollBundle_test_show:
-    pattern:  /test/{id}
+    pattern:  /test/{test_id}
     defaults: { _controller: TestPollBundle:Test:show }
     requirements:
-        _method:  GET
-        id: \d+
+        _method:  GET|POST
+        test_id: \d+
         
 TestPollBundle_test_list:
     pattern:  /tests
     defaults: { _controller: TestPollBundle:Page:test_list }
     requirements:
         _method:  GET
+        
+

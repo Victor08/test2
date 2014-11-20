@@ -1,0 +1,8 @@
+{% extends 'TestPollBundle::layout.html.twig' %}
+
+{% block title %}Answer the questions{% endblock%}
+
+{% block body %}
+    <h1>Please follow the questions of "{{ submittedTest.test.title }}"</h1>
+    {% include 'TestPollBundle:Test:form.html.twig' with { 'form': form } %}
+{% endblock %}

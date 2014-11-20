@@ -1,0 +1,7 @@
+<form   {#action="{#{ path(app.request.attributes.get('_route_params'))}#} method="POST" {{ form_enctype(form) }} class="test">
+    {{ form_widget(form) }}
+    <p>
+        
+        <input type="submit" value="Submit">
+    </p>
+</form>
