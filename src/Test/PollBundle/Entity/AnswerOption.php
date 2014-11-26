@@ -12,11 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\AnswerRepository")
- * @ORM\Table(name="myanswer")
+ * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\AnswerOptionRepository")
+ * @ORM\Table(name="answerOptions")
  * @ORM\HasLifecycleCallbacks
  */
-class Answer 
+class AnswerOption 
 {
     
     /**
@@ -40,7 +40,7 @@ class Answer
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
-    protected $question;
+    protected $questionId;
     
     /**
      * @ORM\Column(type="boolean")
@@ -92,28 +92,7 @@ class Answer
         return $this->title;
     }
 
-    /**
-     * Set question
-     *
-     * @param \Test\PollBundle\Entity\Question $question
-     * @return Answer
-     */
-    public function setQuestion(\Test\PollBundle\Entity\Question $question = null)
-    {
-        $this->question = $question;
-
-        return $this;
-    }
-
-    /**
-     * Get question
-     *
-     * @return \Test\PollBundle\Entity\Question 
-     */
-    public function getQuestion()
-    {
-        return $this->question;
-    }
+    
 
     /**
      * Set approved
@@ -159,5 +138,28 @@ class Answer
     public function getCorrect()
     {
         return $this->correct;
+    }
+
+    /**
+     * Set questionId
+     *
+     * @param \Test\PollBundle\Entity\Question $questionId
+     * @return AnswerOption
+     */
+    public function setQuestionId(\Test\PollBundle\Entity\Question $questionId = null)
+    {
+        $this->questionId = $questionId;
+
+        return $this;
+    }
+
+    /**
+     * Get questionId
+     *
+     * @return \Test\PollBundle\Entity\Question 
+     */
+    public function getQuestionId()
+    {
+        return $this->questionId;
     }
 }

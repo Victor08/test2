@@ -13,87 +13,87 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Test\PollBundle\Entity\Test;
 use Test\PollBundle\Entity\Question;
-use Test\PollBundle\Entity\Answer;
+use Test\PollBundle\Entity\AnswerOption;
 
-class AnswerFixtures extends AbstractFixture implements OrderedFixtureInterface
+class AnswerOptionFixtures extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('01 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-1'));
+        $answer->setQuestionId($this->getReference('q-1'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('02 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-1'));
+        $answer->setQuestionId($this->getReference('q-1'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('03 bla bla');
         $answer->setCorrect(true);
-        $answer->setQuestion($this->getReference('q-1'));
+        $answer->setQuestionId($this->getReference('q-1'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('01 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-1'));
+        $answer->setQuestionId($this->getReference('q-1'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('04 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-2'));
+        $answer->setQuestionId($this->getReference('q-2'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('05 bla bla');
         $answer->setCorrect(true);
-        $answer->setQuestion($this->getReference('q-2'));
+        $answer->setQuestionId($this->getReference('q-2'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('06 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-2'));
+        $answer->setQuestionId($this->getReference('q-2'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('07 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-3'));
+        $answer->setQuestionId($this->getReference('q-3'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('08 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-3'));
+        $answer->setQuestionId($this->getReference('q-3'));
 
         $manager->persist($answer);
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('09 bla bla');
         $answer->setCorrect(true);
-        $answer->setQuestion($this->getReference('q-3'));
+        $answer->setQuestionId($this->getReference('q-3'));
 
         $manager->persist($answer);
         
         
-        $answer = new Answer();
+        $answer = new AnswerOption();
         $answer->setTitle('10 bla bla');
         $answer->setCorrect(false);
-        $answer->setQuestion($this->getReference('q-3'));
+        $answer->setQuestionId($this->getReference('q-3'));
 
         $manager->persist($answer);
         

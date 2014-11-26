@@ -8,10 +8,14 @@
 
 namespace Test\PollBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Test\PollBundle\Entity\SubmittedTest;
-use Test\PollBundle\Form\SubmittedTestType;
 
+use Test\PollBundle\Entity\Test;
+use Test\PollBundle\Entity\Question;
+use Test\PollBundle\Form\TestType;
+use Test\PollBundle\Entity\UserAnswerPaper;
+use Test\PollBundle\Form\UserAnswerPaperType;
 /**
  * Test controller.
  */
@@ -45,43 +49,39 @@ class TestController extends Controller
     }
     */
     
-    public function showAction($test_id)
+    public function showAction($test_id, Request $request)
     {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $userId = $user->getId();
+        
         $test = $this->getTest($test_id);
-
-        $submittedTest = new SubmittedTest();
-        $submittedTest->setTestId($test_id);
-        $form    = $this->createFormBuilder($submittedTest)
-                        ->setAction($this->generateUrl('TestPollBundle_test_submitted'))
-                        ->setMethod('POST')
-                        ->add('userId', 'integer')
-                        ->add('testId', 'integer')
-                        ->add('date', 'date')
-                        ->add('save', 'submit')
-                        ->getForm();
-        $request = $this->getRequest();
-        if ($request->getMethod() == 'POST') {
-            $form->submit($request);
-            if ($form->isValid()) 
-            {
-
-                $em = $this->getDoctrine()
-                           ->getEntityManager();
-                $em->persist($submittedTest);
-                $em->flush();
-
-
-                return $this->redirect($this->generateUrl('TestPollBundle_test_submitted', array(
-                    'id' => $submittedTest->getTestId())) .
-                    '#submittedTest-' . $submittedTest->getId()
-                );
-            }
+        
+        $em = $this->getDoctrine()
+                   ->getEntityManager();
+        $test->setQuestions($em);
+        $test->setAnswerOptions($em);
+        $test->setQuestionPaper();     
+        
+        $answerPaper = new UserAnswerPaper ($test_id, $userId);
+        $answerPaper->setAnswerPaper($test);
+        //$answerPaper->setUserAnswers();
+               
+        $form = $this->createForm(new UserAnswerPaperType, $answerPaper, array ('attr'=>array('test'=>$test)));
+  
+        $form->handleRequest($request);
+       
+        if ($form->isValid()) 
+        {
+            $em->persist($answerPaper);
+            $em->flush();
+            return $this->redirect($this->generateUrl('TestPollBundle_test_submitted'));            
         }
+        
             
             
         return $this->render('TestPollBundle:Test:show.html.twig', array(
             'test' => $test,
-            'submittedTest' => $submittedTest,
+            'submittedTest' => $test,
             'form'   => $form->createView()
         ));
     }

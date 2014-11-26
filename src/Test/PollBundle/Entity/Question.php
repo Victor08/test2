@@ -8,6 +8,8 @@
 namespace Test\PollBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 /**
  * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\QuestionRepository")
@@ -33,28 +35,53 @@ class Question
      */
     protected $type;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $approved;
+   
 
     /**
      * @ORM\ManyToOne(targetEntity="Test", inversedBy="questions")
      * @ORM\JoinColumn(name="test_id", referencedColumnName="id")
      */
-    protected $test;
+    protected $testId;
     
     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="AnswerOption", mappedBy="questionId")
      */
-    protected $answers;
+    protected $answerOptions;
 
     public function __construct()
     {
-
-        $this->setApproved(true);
+        
+        $this->answerOptions = new ArrayCollection();
+     //   $this->setAnswerOptions($em);
+     //   $this->setChoiceList();
     }
 
+//    
+//    protected $choiceList;
+//    public function setChoiceList()
+//    {
+//        
+//        $answerIds = array();
+//        $answerTitles = array ();
+//        foreach ($this->answerOptions as $option)
+//        {
+//            $answerIds[] = $option->getId();
+//            $answerTitles[] = $option->getTitle();
+//        }
+//        $this->choiceList = new ChoiceList ($answerIds, $answerTitles);
+//                
+//    }
+//    public function getChoiceList() 
+//    {
+//        if ($this->choiceList) 
+//        { 
+//            return $this->сhoiceList;
+//        } else {
+//            $this->setChoiceList();
+//            return $this->сhoiceList;
+//
+//        }
+//    }
 
     /**
      * Get id
@@ -135,59 +162,79 @@ class Question
         return $this->approved;
     }
 
+  
+
+    
+    
+
     /**
-     * Set test
+     * Set testId
      *
-     * @param \Test\PollBundle\Entity\Test $test
+     * @param \Test\PollBundle\Entity\Test $testId
      * @return Question
      */
-    public function setTest(\Test\PollBundle\Entity\Test $test = null)
+    public function setTestId(\Test\PollBundle\Entity\Test $testId = null)
     {
-        $this->test = $test;
+        $this->testId = $testId;
 
         return $this;
     }
 
     /**
-     * Get test
+     * Get testId
      *
      * @return \Test\PollBundle\Entity\Test 
      */
-    public function getTest()
+    public function getTestId()
     {
-        return $this->test;
+        return $this->testId;
     }
 
     /**
-     * Add answers
+     * Add answerOptions
      *
-     * @param \Test\PollBundle\Entity\Answer $answers
+     * @param \Test\PollBundle\Entity\AnswerOption $answerOptions
      * @return Question
      */
-    public function addAnswer(\Test\PollBundle\Entity\Answer $answers)
+    public function addAnswerOption(\Test\PollBundle\Entity\AnswerOption $answerOptions)
     {
-        $this->answers[] = $answers;
+        $this->answerOptions[] = $answerOptions;
 
         return $this;
     }
 
     /**
-     * Remove answers
+     * Remove answerOptions
      *
-     * @param \Test\PollBundle\Entity\Answer $answers
+     * @param \Test\PollBundle\Entity\AnswerOption $answerOptions
      */
-    public function removeAnswer(\Test\PollBundle\Entity\Answer $answers)
+    public function removeAnswerOption(\Test\PollBundle\Entity\AnswerOption $answerOptions)
     {
-        $this->answers->removeElement($answers);
+        $this->answerOptions->removeElement($answerOptions);
     }
 
+    
+    public function setAnswerOptions(\Doctrine\ORM\EntityManager $em)
+    {
+        $options = $em->getRepository('TestPollBundle:AnswerOption')->getAnswerOptionsForQuestion($this->id);
+        foreach ($options as $o){
+            $this->addAnswerOption($o);
+        }
+    }
+
+
     /**
-     * Get answers
+     * Get answerOptions
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAnswers()
+    public function getAnswerOptions()
     {
-        return $this->answers;
+       
+        return $this->answerOptions;
+    }
+    
+    public function __toString() {
+        return '$this->id;';
     }
 }

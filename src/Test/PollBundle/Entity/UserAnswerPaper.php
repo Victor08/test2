@@ -1,29 +1,26 @@
 <?php
-
+namespace Test\PollBundle\Entity;
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-namespace Test\PollBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
-
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Test\PollBundle\Entity\UserAnswer;
 /**
- * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\AnswerRepository")
- * @ORM\Table(name="submittedTests")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\UserAnswerPaperRepository")
+ * @ORM\Table(name="userAnswerPapers")
+ * @ORM\HasLifecycleCallbacks()
  */
-Class SubmittedTest 
+class UserAnswerPaper
 {
-    
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", unique=true)
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
@@ -38,23 +35,41 @@ Class SubmittedTest
      */
     protected $testId;
     
+
+     public function __construct($testId, $userId) {
+        
+        $this->userAnswers = array ();
+        $this->testId = $testId;
+        $this->userId = $userId;
+    }
+    
     /**
      * @ORM\Column(type="array")
      */
     protected $userAnswers;
     
+   
     
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    protected $date;
+    protected $answerPaper;
     
+    public function setAnswerPaper(\Test\PollBundle\Entity\Test $test) 
+    {
+        $i=0;
+        foreach ($test->getQuestions() as $q) {
+            $this->answerPaper[$i]['questionId']=$q->getId();
+            $this->answerPaper[$i]['questionTitle']=$q->getTitle();
+            $this->answerPaper[$i]['questionType']=$q->getType();
+            $answerOptions=$q->getAnswerOptions();          
+            foreach ($answerOptions as $a ) {
+                $this->answerPaper[$i]['answerOptions'][$a->getQuestionId().'_'.$a->getId()]=$a->getTitle();               
+            }
+            $i++;
+        } 
+    }
     
-    
-    
-    
-    
-    
+    public function getAnswerPaper(){
+        return $this->answerPaper;
+    }
 
     /**
      * Get id
@@ -70,7 +85,7 @@ Class SubmittedTest
      * Set userId
      *
      * @param integer $userId
-     * @return SubmittedTest
+     * @return UserAnswerPaper
      */
     public function setUserId($userId)
     {
@@ -93,7 +108,7 @@ Class SubmittedTest
      * Set testId
      *
      * @param integer $testId
-     * @return SubmittedTest
+     * @return UserAnswerPaper
      */
     public function setTestId($testId)
     {
@@ -112,11 +127,12 @@ Class SubmittedTest
         return $this->testId;
     }
 
+
     /**
      * Set userAnswers
      *
      * @param array $userAnswers
-     * @return SubmittedTest
+     * @return UserAnswerPaper
      */
     public function setUserAnswers($userAnswers)
     {
@@ -134,39 +150,4 @@ Class SubmittedTest
     {
         return $this->userAnswers;
     }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     * @return SubmittedTest
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime 
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-    
-  /*  public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('user', new NotBlank(array(
-            'message' => 'You must enter your name'
-        )));
-        $metadata->addPropertyConstraint('comment', new NotBlank(array(
-            'message' => 'You must enter a comment'
-        )));
-    }
-   
-   */
 }

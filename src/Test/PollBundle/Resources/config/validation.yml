@@ -1,0 +1,11 @@
+Test\PollBundle\Entity\SubmittedTest:
+    properties:
+        userId:
+            - NotBlank: ~
+        testId:
+            - NotBlank: ~
+        userAnswers:
+            - NotBlank: ~
+        date:
+            - NotBlank: ~
+            - Type: \DateTime

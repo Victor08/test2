@@ -47,16 +47,38 @@ class Test
      */
     protected $description;
     
+    protected $questionPaper = array();
+    
+    public function setQuestionPaper ()            
+    {
+        $i=0;
+        foreach ($this->questions as $q) {
+            $this->questionPaper[$i]['questionId']=$q->getId();
+            $this->questionPaper[$i]['questionTitle']=$q->getTitle();
+            $this->questionPaper[$i]['questionType']=$q->getType();
+            $answerOptions=$q->getAnswerOptions();
+            
+            foreach ($answerOptions as $a ) {
+                $this->questionPaper[$i]['answerOptions'][$a->getId()]=$a->getTitle();              
+                
+            }
+            $i++;
+        }               
+    }
+    
+    public function getQuestionPaper () {
+        return $this->questionPaper;
+    }
+
     /**
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="test")
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="testId")
      */
     protected $questions;
     
     public function __construct()
     {
         $this->questions = new ArrayCollection();
-
-        $this->setCreated(new \DateTime());
+        
         
     }
     
@@ -144,12 +166,30 @@ class Test
         return $this->created;
     }
     
+    public function setQuestions (\Doctrine\ORM\EntityManager $em)
+    {
+        $questions = $em->getRepository('TestPollBundle:Question')->getQuestionsForTest($this->id);
+        foreach ($questions as $q){
+            $this->addQuestion($q);
+        }
+    }
+    
+    public function setAnswerOptions (\Doctrine\ORM\EntityManager $em) 
+    {
+        foreach ($this->questions as $q)
+        {
+            $q->setAnswerOptions($em);
+        }
+    }
+
+
     public function getQuestions($length = null)
     {
         if (false === is_null($length) && $length > 0)
             return substr($this->questions, 0, $length);
         else
             return $this->questions;
+       
     }
 
     /**
@@ -219,5 +259,9 @@ class Test
     public function getCorrectAnswers()
     {
         return $this->correctAnswers;
+    }
+    
+    public function __toString() {
+        return 'Test';
     }
 }

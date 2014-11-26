@@ -16,16 +16,14 @@ class QuestionRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('q')
                    ->select('q')
-                   ->where('q.test = :test_id')
+                   ->where('q.testId = :test_id')
                    ->addOrderBy('q.id')
                    ->setParameter('test_id', $testId);
 
-        if (false === is_null($approved))
-            $qb->andWhere('q.approved = :approved')
-               ->setParameter('approved', $approved);
+       
 
         return $qb->getQuery()
-                  ->getArrayResult();
+                  ->getResult();
    /*     
         for ($i=0; $i<count(  $questions ) ; $i++)
         {
@@ -40,5 +38,33 @@ class QuestionRepository extends EntityRepository
         }
     * */
     
+    }
+    
+    public function getQuestionsForTestArray($testId, $approved = true)
+    {
+        $qb = $this->createQueryBuilder('q')
+                   ->select('q')
+                   ->where('q.testId = :test_id')
+                   ->addOrderBy('q.id')
+                   ->setParameter('test_id', $testId);
+
+       
+
+        return $qb->getQuery()
+                  ->getArrayResult();
+    }
+    
+    public function getQuestionIdsForTest($testId, $approved = true)
+    {
+        $qb = $this->createQueryBuilder('q')
+                   ->select('q.id')
+                   ->where('q.testId = :test_id')
+                   ->addOrderBy('q.id')
+                   ->setParameter('test_id', $testId);
+
+       
+
+        return $qb->getQuery()
+                  ->getArrayResult();
     }
 }

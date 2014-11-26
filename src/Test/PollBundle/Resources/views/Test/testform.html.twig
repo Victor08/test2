@@ -1,7 +1,17 @@
-<form   {#action="{#{ path(app.request.attributes.get('_route_params'))}#} method="POST" {{ form_enctype(form) }} class="test">
-    {{ form_widget(form) }}
-    <p>
-        
-        <input type="submit" value="Submit">
-    </p>
-</form>
+
+{{form(form)}}
+
+
+{#    {{ form_start(form) }}
+    {{ form_errors(form) }}
+        {{ form_row(form.testId) }}
+        <ul>
+        {% for q in form.userAnswers %}
+            <li>{{ form_row(q.answerOptionId) }}</li>
+             {% endfor %}
+
+        </ul>
+    
+{{ form_end(form) }}#}
+
+
