@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Doctrine\Common\Collections\ArrayCollection;
 use Test\PollBundle\Entity\UserAnswer;
+use Symfony\Component\Validator\Constraints\DateTime;
 /**
  * @ORM\Entity(repositoryClass="Test\PollBundle\Entity\Repository\UserAnswerPaperRepository")
  * @ORM\Table(name="userAnswerPapers")
@@ -36,20 +37,29 @@ class UserAnswerPaper
     protected $testId;
     
 
-     public function __construct($testId, $userId) {
+    public function __construct(\Test\PollBundle\Entity\Test $test, \Symfony\Component\Security\Core\SecurityContext  $securityContext) {
         
         $this->userAnswers = array ();
-        $this->testId = $testId;
-        $this->userId = $userId;
+        $this->testId = $test->getId();
+        $this->userId = $securityContext->getToken()->getUser()->getId();
+        $this->setAnswerPaper($test);
+        
     }
+    
     
     /**
      * @ORM\Column(type="array")
      */
     protected $userAnswers;
     
-   
-    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $result;
+
+
+
+
     protected $answerPaper;
     
     public function setAnswerPaper(\Test\PollBundle\Entity\Test $test) 
@@ -61,7 +71,7 @@ class UserAnswerPaper
             $this->answerPaper[$i]['questionType']=$q->getType();
             $answerOptions=$q->getAnswerOptions();          
             foreach ($answerOptions as $a ) {
-                $this->answerPaper[$i]['answerOptions'][$a->getQuestionId().'_'.$a->getId()]=$a->getTitle();               
+                $this->answerPaper[$i]['answerOptions'][$a->getQuestionId().'_'.$a->getTitle()]=$a->getTitle();               
             }
             $i++;
         } 
@@ -150,4 +160,35 @@ class UserAnswerPaper
     {
         return $this->userAnswers;
     }
+    
+    public function __toString() {
+        return 'ololo';
+    }
+
+    /**
+     * Set result
+     *
+     * @param integer $result
+     * @return UserAnswerPaper
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
+    /**
+     * Get result
+     *
+     * @return integer 
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+    
+   
+
+    
 }

@@ -17,8 +17,8 @@ class UserAnswerPaperType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
     
-        $answerPaper = $options['attr']['test']->getQuestionPaper();
-        $builder->add('testId');
+        $answerPaper = $options['attr']['answerPaper']->getAnswerPaper();
+        
         for ($i=0; $i<count($answerPaper);$i++){
             if ($answerPaper[$i]['questionType'] == 1){
             $builder->add('userAnswers_'.$i, 'choice', array(
@@ -33,6 +33,10 @@ class UserAnswerPaperType extends AbstractType
                 'choices' => array ($answerPaper[$i]['answerOptions']),
                 'expanded' => true,
                 'multiple' => false,
+                ));
+            } else if ($answerPaper[$i]['questionType']==3) {
+                $builder->add('userAnswers_'.$i, 'text', array(
+                    'property_path' => 'userAnswers['.$i.']',
                 ));
             }
         }
