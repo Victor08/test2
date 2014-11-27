@@ -235,6 +235,7 @@ class Question
     }
     
     public function __toString() {
-        return '$this->id;';
+        $a = (string)  $this->id;
+        return $a;
     }
 }

@@ -21,7 +21,7 @@ class QuestionFixtures extends AbstractFixture implements OrderedFixtureInterfac
     {
         $question1 = new Question();
         $question1->setTitle('01 whats the weather like today?');
-        $question1->setType(1);
+        $question1->setType(3);
         $question1->setTestId($manager->merge($this->getReference('test-1')));
         $manager->persist($question1);
         

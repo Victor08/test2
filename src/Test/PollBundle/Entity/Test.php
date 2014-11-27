@@ -9,6 +9,7 @@
 namespace Test\PollBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Test\PollBundle\Entity\TestProcessor;
 
 
 
@@ -18,7 +19,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="test")
  * @ORM\HasLifecycleCallbacks()
  */
-class Test 
+class Test extends TestProcessor
 {
     /**
      * @ORM\Id
@@ -47,24 +48,13 @@ class Test
      */
     protected $description;
     
-    protected $questionPaper = array();
     
-    public function setQuestionPaper ()            
-    {
-        $i=0;
-        foreach ($this->questions as $q) {
-            $this->questionPaper[$i]['questionId']=$q->getId();
-            $this->questionPaper[$i]['questionTitle']=$q->getTitle();
-            $this->questionPaper[$i]['questionType']=$q->getType();
-            $answerOptions=$q->getAnswerOptions();
-            
-            foreach ($answerOptions as $a ) {
-                $this->questionPaper[$i]['answerOptions'][$a->getId()]=$a->getTitle();              
-                
-            }
-            $i++;
-        }               
-    }
+    /**
+     * @ORM\Column(type="array")
+     */
+    protected $correctAnswers ;
+    
+    
     
     public function getQuestionPaper () {
         return $this->questionPaper;
@@ -75,17 +65,28 @@ class Test
      */
     protected $questions;
     
-    public function __construct()
+    public function __construct(\Doctrine\ORM\EntityManager $em=null)
     {
         $this->questions = new ArrayCollection();
+        if ($em){
+            $this->setQuestionsAndOptions($em);
+            
+            $this->setCorrectAnswers();
+        }
         
         
     }
     
-    /**
-     * @ORM\Column(type="array")
-     */
-    protected $correctAnswers;
+//    public function init($testId=null, \Doctrine\ORM\EntityManager $em=null){
+//        
+//        if(!$this->id){
+//            $this->id = $testId;
+//        }
+//        if (!)
+//    }
+
+
+    
 
     /**
      * Get id
@@ -166,21 +167,21 @@ class Test
         return $this->created;
     }
     
-    public function setQuestions (\Doctrine\ORM\EntityManager $em)
+    public function setQuestionsAndOptions (\Doctrine\ORM\EntityManager $em)
     {
+        if (!isset($this->id)) { return false; }
+        
         $questions = $em->getRepository('TestPollBundle:Question')->getQuestionsForTest($this->id);
         foreach ($questions as $q){
             $this->addQuestion($q);
-        }
-    }
-    
-    public function setAnswerOptions (\Doctrine\ORM\EntityManager $em) 
-    {
+        } 
         foreach ($this->questions as $q)
         {
             $q->setAnswerOptions($em);
         }
     }
+    
+    
 
 
     public function getQuestions($length = null)
@@ -238,18 +239,7 @@ class Test
         return $this->description;
     }
 
-    /**
-     * Set correctAnswers
-     *
-     * @param array $correctAnswers
-     * @return Test
-     */
-    public function setCorrectAnswers($correctAnswers)
-    {
-        $this->correctAnswers = $correctAnswers;
-
-        return $this;
-    }
+    
 
     /**
      * Get correctAnswers
@@ -264,4 +254,10 @@ class Test
     public function __toString() {
         return 'Test';
     }
+    
+   
+
+    
+
+  
 }

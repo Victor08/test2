@@ -1,5 +1,4 @@
-{% extends 'TestPollBundle::layout.html.twig' %}
-
+{% extends 'TestPollBundle:Test:show.html.twig' %}
 {% form_theme form _self %}
 
 {% block form_start -%}
@@ -117,16 +116,9 @@
 
 
 
+        {% block testform %} 
 
+            {{form(form)}}
 
-{% block title %}{{ test.title }}{% endblock %}
-
-{% block body %}
-    
-    <h1>Please answer the questions</h1>
-    {% block testform %}
-        {{form(form)}}
-    {% endblock %}
-    
-{% endblock %}
-
+        {% endblock %}
+                                                                    

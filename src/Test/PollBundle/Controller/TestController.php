@@ -15,6 +15,7 @@ use Test\PollBundle\Entity\Test;
 use Test\PollBundle\Entity\Question;
 use Test\PollBundle\Form\TestType;
 use Test\PollBundle\Entity\UserAnswerPaper;
+use Test\PollBundle\Entity\TestProcessor;
 use Test\PollBundle\Form\UserAnswerPaperType;
 /**
  * Test controller.
@@ -51,35 +52,47 @@ class TestController extends Controller
     
     public function showAction($test_id, Request $request)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $userId = $user->getId();
+//        $user = $this->get('security.context')->getToken()->getUser();
+//        $userId = $user->getId();
+//        
+//        $test = $this->getTest($test_id);
+//        
+//        $em = $this->getDoctrine()
+//                   ->getEntityManager();
+//        $test->setQuestions($em);
+//        $test->setAnswerOptions($em);
+//        $test->setCorrectAnswers();
+//           
+//        
+//        $answerPaper = new UserAnswerPaper ($test_id, $userId);
+//        $answerPaper->setAnswerPaper($test);
+//        //$answerPaper->setUserAnswers();
+        $em = $this->getDoctrine()
+                   ->getManager();
         
         $test = $this->getTest($test_id);
+        $test->setQuestionsAndOptions($em);
         
-        $em = $this->getDoctrine()
-                   ->getEntityManager();
-        $test->setQuestions($em);
-        $test->setAnswerOptions($em);
-        $test->setQuestionPaper();     
-        
-        $answerPaper = new UserAnswerPaper ($test_id, $userId);
-        $answerPaper->setAnswerPaper($test);
-        //$answerPaper->setUserAnswers();
+        $answerPaper = new UserAnswerPaper ($test, $this->get('security.context'));
                
-        $form = $this->createForm(new UserAnswerPaperType, $answerPaper, array ('attr'=>array('test'=>$test)));
+        $form = $this->createForm(new UserAnswerPaperType, $answerPaper, array ('attr'=>array('answerPaper'=>$answerPaper)));
   
         $form->handleRequest($request);
        
         if ($form->isValid()) 
         {
-            $em->persist($answerPaper);
+           
+            
+            $answerPaper->setResult($test->checkOnSubmit($answerPaper));
+            
+            $em->persist($answerPaper);           
             $em->flush();
-            return $this->redirect($this->generateUrl('TestPollBundle_test_submitted'));            
+            return $this->forward('TestPollBundle:Test:test_submitted', array('answerPaper'=>$answerPaper));            
         }
         
             
             
-        return $this->render('TestPollBundle:Test:show.html.twig', array(
+        return $this->render('TestPollBundle:Test:testform.html.twig', array(
             'test' => $test,
             'submittedTest' => $test,
             'form'   => $form->createView()
@@ -89,23 +102,23 @@ class TestController extends Controller
     
     
     
-    public function test_submittedAction () 
+    public function test_submittedAction ($answerPaper = false) 
     {
 
            
-            return $this->render('TestPollBundle:Test:test_submitted.html.twig');
+            return $this->render('TestPollBundle:Test:test_submitted.html.twig', array('answerPaper'=>$answerPaper));
        
     }
         
     protected function getTest($test_id)
     {
         $em = $this->getDoctrine()
-                    ->getEntityManager();
+                    ->getManager();
 
         $test = $em->getRepository('TestPollBundle:Test')->find($test_id);
 
         if (!$test) {
-            throw $this->createNotFoundException('Unable to find the Test.');
+            throw $this->createNotFoundException('Unable to find the Test #'.$testId.'.');
         }
 
         return $test;

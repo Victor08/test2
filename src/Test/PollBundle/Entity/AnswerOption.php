@@ -27,7 +27,7 @@ class AnswerOption
     protected $id;
     
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string")
      */
     protected $correct;
     

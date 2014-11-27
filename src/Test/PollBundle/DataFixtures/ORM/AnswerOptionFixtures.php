@@ -21,7 +21,7 @@ class AnswerOptionFixtures extends AbstractFixture implements OrderedFixtureInte
     {
         $answer = new AnswerOption();
         $answer->setTitle('01 bla bla');
-        $answer->setCorrect(false);
+        $answer->setCorrect("ololo");
         $answer->setQuestionId($this->getReference('q-1'));
 
         $manager->persist($answer);

@@ -8,9 +8,39 @@
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
         {% block stylesheets %}
+            <!-- google fonts -->
             <link href='http://fonts.googleapis.com/css?family=Quantico:700' rel='stylesheet' type='text/css'>
-            <link href='http://fonts.googleapis.com/css?family=Cuprum:400,700italic' rel='stylesheet' type='text/css'>
+            <link href='http://fonts.googleapis.com/css?family=Cuprum:400,700italic' rel='stylesheet' type='text/css'>           
+            
+            <!-- main custom scc -->
             <link href="{{ asset('css/main.css') }}" type="text/css" rel="stylesheet" />
+            
+            <!-- Jquery css -->
+            
+            
+            <link href="{{ asset('javascript/jqueryUi/jquery-ui.css') }}" type="text/css" rel="stylesheet" />
+            
+            <!-- FontAwesome css -->
+            <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+            
+            <!-- bootstrap css -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+            
+            
+            
+            
+            <!-- JQuery -->
+            <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+            <!-- JQuery UI-->
+            <script src="{{asset('javascript/jqueryUi/jquery-ui.js')}}"></script>
+            
+            
+            <!-- bootstrap Optional theme -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+            
+            <!-- bootstrap JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+            
         {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>

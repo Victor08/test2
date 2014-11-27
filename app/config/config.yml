@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: "@TestPollBundle/Resources/config/services.yml" }
 
 framework:
     #esi:             ~
@@ -75,3 +76,6 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+    
+
+    
