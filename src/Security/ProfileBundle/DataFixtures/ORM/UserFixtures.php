@@ -13,6 +13,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Security\ProfileBundle\Entity\User;
+use Security\ProfileBundle\Entity\Role;
 
 class UserFixtures implements FixtureInterface, ContainerAwareInterface
 {
@@ -44,6 +45,14 @@ class UserFixtures implements FixtureInterface, ContainerAwareInterface
 
       $manager->persist($user);
 
+      $user = new User();
+      $user->setUsername("Viktor_admin");
+      $user->setSalt(md5(uniqid()));
+      $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+      $user->setPassword($encoder->encodePassword('12345', $user->getSalt()));
+
+      $manager->persist($user);
+      
       $manager->flush();
     }
 }

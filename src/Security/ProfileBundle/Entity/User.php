@@ -4,12 +4,15 @@ namespace Security\ProfileBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * @ORM\Table(name="Users")
  * @ORM\Entity(repositoryClass="Security\ProfileBundle\Entity\UserRepository")
  */
-class User implements UserInterface, \Serializable
+class User implements \Serializable, AdvancedUserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -37,11 +40,21 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
+    
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     *
+     */
+    private $roles;
+    
 
     public function __construct()
     {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
+        $this->roles = new ArrayCollection();
+
     }
 
     /**
@@ -68,13 +81,6 @@ class User implements UserInterface, \Serializable
         return $this->password;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
 
     /**
      * @inheritDoc
@@ -90,6 +96,7 @@ class User implements UserInterface, \Serializable
     {
         return serialize(array(
             $this->id,
+            $this->isActive,
         ));
     }
 
@@ -173,5 +180,52 @@ class User implements UserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getRoles () {
+        return $this->roles->toArray();
+    }
+    
+    public function isAccountNonExpired() {
+        return true;
+    }
+    public function isAccountNonLocked() {
+        return true;
+    }
+    public function isCredentialsNonExpired() {
+        return true;
+    }
+    public function isEnabled() {
+        if ($this->isActive == 1){
+            return true;       
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Add roles
+     *
+     * @param \Security\ProfileBundle\Entity\Role $roles
+     * @return User
+     */
+    public function addRole(\Security\ProfileBundle\Entity\Role $roles)
+    {
+        $this->roles[] = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Security\ProfileBundle\Entity\Role $roles
+     */
+    public function removeRole(\Security\ProfileBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
     }
 }
